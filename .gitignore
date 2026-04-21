@@ -1,0 +1,11 @@
+# Mevcut ve alt klasörlerdeki derlenmiş dosyaları yoksay
+target/
+**/target/
+*.class
+*.jar
+*.war
+.idea/
+*.iml
+.DS_Store
+.vscode/
+node_modules/

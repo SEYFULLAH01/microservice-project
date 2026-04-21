@@ -1,0 +1,41 @@
+services:
+  eureka-server:
+    image: eureka-server:latest
+    build: ./eureka-server
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    networks:
+      - micro-network
+
+  product-service:
+    image: product-service:latest
+    build: ./product-service
+    container_name: product-service
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+    ports:
+      - "8081:8080"
+    depends_on:
+      - eureka-server
+    networks:
+      - micro-network
+
+  order-service:
+    image: order-service:latest
+    build: ./order-service
+    container_name: order-service
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - PRODUCT_SERVICE_URL=http://PRODUCT-SERVICE/products
+    ports:
+      - "8082:8080"
+    depends_on:
+      - eureka-server
+      - product-service
+    networks:
+      - micro-network
+
+networks:
+  micro-network:
+    driver: bridge
